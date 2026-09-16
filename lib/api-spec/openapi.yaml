@@ -3,13 +3,15 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Prime RP public community platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: content
+    description: Public Prime RP content
 paths:
   /healthz:
     get:
@@ -24,6 +26,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /content:
+    get:
+      operationId: getPublicContent
+      tags: [content]
+      summary: Get public Prime RP content
+      description: Returns the published content used by the public Arabic and English site.
+      responses:
+        "200":
+          description: Public content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicContent"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +48,76 @@ components:
           type: string
       required:
         - status
+    Job:
+      type: object
+      required: [id, slug, titleAr, titleEn, descriptionAr, descriptionEn, icon]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        titleAr: { type: string }
+        titleEn: { type: string }
+        descriptionAr: { type: string }
+        descriptionEn: { type: string }
+        icon: { type: string }
+    NewsPost:
+      type: object
+      required: [id, slug, titleAr, titleEn, excerptAr, excerptEn, contentAr, contentEn, createdAt]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        titleAr: { type: string }
+        titleEn: { type: string }
+        excerptAr: { type: string }
+        excerptEn: { type: string }
+        contentAr: { type: string }
+        contentEn: { type: string }
+        createdAt: { type: string, format: date-time }
+    Rule:
+      type: object
+      required: [id, category, titleAr, titleEn, contentAr, contentEn]
+      properties:
+        id: { type: string }
+        category: { type: string }
+        titleAr: { type: string }
+        titleEn: { type: string }
+        contentAr: { type: string }
+        contentEn: { type: string }
+    Product:
+      type: object
+      required: [id, nameAr, nameEn, descriptionAr, descriptionEn, price, currency, featured]
+      properties:
+        id: { type: string }
+        nameAr: { type: string }
+        nameEn: { type: string }
+        descriptionAr: { type: string }
+        descriptionEn: { type: string }
+        price: { type: number }
+        currency: { type: string }
+        featured: { type: boolean }
+    PublicContent:
+      type: object
+      required: [jobs, news, rules, products, stats]
+      properties:
+        jobs:
+          type: array
+          items: { $ref: "#/components/schemas/Job" }
+        news:
+          type: array
+          items: { $ref: "#/components/schemas/NewsPost" }
+        rules:
+          type: array
+          items: { $ref: "#/components/schemas/Rule" }
+        products:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        stats:
+          $ref: "#/components/schemas/PublicStats"
+    PublicStats:
+      type: object
+      required: [jobs, news, rules, products]
+      properties:
+        jobs: { type: integer }
+        news: { type: integer }
+        rules: { type: integer }
+        products: { type: integer }
 

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Prime RP"
+description = "A bilingual Arabic and English roleplay community platform with public community pages, jobs, rules, news, store, and a protected admin foundation for managing content."
+version = "1.0.0"
+id = "artifacts/prime-rp"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22299
+
+[services.development]
+run = "pnpm --filter @workspace/prime-rp run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/prime-rp", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/prime-rp/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22299"
+BASE_PATH = "/"

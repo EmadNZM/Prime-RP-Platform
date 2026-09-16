@@ -1,0 +1,120 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+  SUPPORT
+  EDITOR
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(SUPPORT)
+  locale       String   @default("ar")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  tickets      Ticket[] @relation("TicketOwner")
+  logs         AuditLog[]
+}
+
+model NewsPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleAr     String
+  titleEn     String
+  excerptAr   String
+  excerptEn   String
+  contentAr   String
+  contentEn   String
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Rule {
+  id          String   @id @default(cuid())
+  category    String
+  titleAr     String
+  titleEn     String
+  contentAr   String
+  contentEn   String
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+}
+
+model Job {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleAr     String
+  titleEn     String
+  descriptionAr String
+  descriptionEn String
+  icon        String   @default("briefcase")
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  nameAr      String
+  nameEn      String
+  descriptionAr String
+  descriptionEn String
+  price       Decimal  @db.Decimal(10, 2)
+  currency    String   @default("JOD")
+  active      Boolean  @default(true)
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  subject     String
+  status      TicketStatus @default(OPEN)
+  priority    String       @default("normal")
+  ownerId     String?
+  owner       User?        @relation("TicketOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  messages    TicketMessage[]
+}
+
+model TicketMessage {
+  id        String   @id @default(cuid())
+  ticketId  String
+  authorId  String?
+  message   String
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  userId    String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

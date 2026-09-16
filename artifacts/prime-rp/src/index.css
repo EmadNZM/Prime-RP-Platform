@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+}
+
+:root {
+  --background: 222 29% 7%;
+  --foreground: 36 22% 92%;
+  --border: 218 18% 20%;
+  --input: 218 18% 20%;
+  --ring: 31 94% 57%;
+  --card: 220 25% 10%;
+  --card-foreground: 36 22% 92%;
+  --primary: 31 94% 57%;
+  --primary-foreground: 222 29% 7%;
+  --secondary: 218 19% 16%;
+  --secondary-foreground: 36 22% 92%;
+  --muted: 219 18% 14%;
+  --muted-foreground: 216 11% 59%;
+  --accent: 189 61% 54%;
+  --accent-foreground: 222 29% 7%;
+  --app-font-sans: 'Manrope', 'Noto Kufi Arabic', sans-serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 0.85rem;
+}
+
+.dark {
+  --background: 222 29% 7%;
+  --foreground: 36 22% 92%;
+  --border: 218 18% 20%;
+  --input: 218 18% 20%;
+  --ring: 31 94% 57%;
+  --card: 220 25% 10%;
+  --card-foreground: 36 22% 92%;
+  --primary: 31 94% 57%;
+  --primary-foreground: 222 29% 7%;
+  --secondary: 218 19% 16%;
+  --secondary-foreground: 36 22% 92%;
+  --muted: 219 18% 14%;
+  --muted-foreground: 216 11% 59%;
+  --accent: 189 61% 54%;
+  --accent-foreground: 222 29% 7%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; background: hsl(var(--background)); }
+  body { @apply bg-background text-foreground antialiased; font-family: var(--app-font-sans); }
+  ::selection { background: hsl(var(--primary) / .3); color: hsl(var(--foreground)); }
+}
+
+@layer utilities {
+  .font-ar { font-family: 'Noto Kufi Arabic', var(--app-font-sans); }
+  .font-mono-ui { font-family: var(--app-font-mono); }
+  .text-balance { text-wrap: balance; }
+  .grid-lines {
+    background-image: linear-gradient(hsl(var(--foreground) / .045) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--foreground) / .045) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-line { 0%, 100% { opacity: .35; transform: scaleX(.85); } 50% { opacity: 1; transform: scaleX(1); } }
+.animate-rise { animation: rise .7s cubic-bezier(.22,.8,.25,1) both; }
+.delay-1 { animation-delay: 100ms; }
+.delay-2 { animation-delay: 180ms; }
+.delay-3 { animation-delay: 260ms; }
+.delay-4 { animation-delay: 340ms; }
+.line-pulse { animation: pulse-line 2.8s ease-in-out infinite; transform-origin: left; }
+.glass { background: hsl(var(--card) / .72); backdrop-filter: blur(18px); }
+.surface { background: linear-gradient(135deg, hsl(var(--card) / .98), hsl(220 24% 8% / .88)); }
+.hairline { border-color: hsl(var(--foreground) / .11); }
+.orange-rule { background: linear-gradient(90deg, hsl(var(--primary)), transparent); }
+
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: hsl(var(--background)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--secondary)); border: 2px solid hsl(var(--background)); border-radius: 99px; }

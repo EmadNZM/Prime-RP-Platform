@@ -1,0 +1,1 @@
+/nix/store/icj39m5m219w3nbkhj3mww1g2n8bi8bs-replit-runtime-path/bin/postgres "-D" "/home/runner/workspace/prime-rp/postgres-data" "-p" "5432" "-h" "127.0.0.1" "-k" "/tmp"
